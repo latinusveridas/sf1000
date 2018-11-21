@@ -346,7 +346,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="UIImage_UPP" destination="ktm-sd-BTg" id="Jcv-hU-6EE"/>
+                                    <outlet property="UIImage_OPP" destination="ktm-sd-BTg" id="dC3-pI-rml"/>
                                     <outlet property="labelDate" destination="dcy-47-fSB" id="V8o-GW-Q22"/>
                                     <outlet property="labelEvent_id" destination="oiD-9Q-HR7" id="sN5-hL-WQx"/>
                                     <outlet property="labelLocation" destination="bjy-26-t9I" id="8nh-DM-nq7"/>

@@ -1,6 +1,7 @@
 import UIKit
 import Foundation
 import Alamofire
+import AlamofireImage
 import SwiftyJSON
 
 class EventsTableViewController: UITableViewController {
@@ -13,7 +14,6 @@ class EventsTableViewController: UITableViewController {
             guard eventsList != nil else {return}
             self.eventsList = eventsList!
             self.tableView.reloadData()
-            
         }
  
         // Do any additional setup after loading the view, typically from a nib.
@@ -52,8 +52,9 @@ class EventsTableViewController: UITableViewController {
     
 //////////////////DEBUG//////////
     @IBAction func DEBUG_action(_ sender: Any) {
-        var myImage = UIImage? = nil
-        AlamoPicture(myImage)
+        AlamoPicture{ myImage in
+          
+        }
     }
     
     
@@ -76,6 +77,9 @@ class EventsTableViewController: UITableViewController {
         print(OPP)
 
         Alamofire.request(OPP, method: .get).responseImage { response in
+            print(response.request)
+            print(response.response)
+            debugPrint(response.result)
             guard let image = response.result.value else {return}
             completion(image)
             
@@ -101,6 +105,7 @@ class EventsTableViewController: UITableViewController {
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
+        //cell.UIImage_OPP.image = "\(eventsList[indexPath.row].organizerImage)"
         
         return cell
     }
@@ -135,6 +140,7 @@ public class eventClass {
     let nb_part_max : Int
     let price_per_part : Int
     let organizer : String
+    //let organizerImage : Image
     
     init(data: [String:Any]) {
         self.event_id = data["event_id"] as! String
@@ -145,6 +151,7 @@ public class eventClass {
         self.nb_part_max = data["nb_part_max"] as! Int
         self.price_per_part = data["price_per_part"] as! Int
         self.organizer = data["organizer"] as! String
+        //self.organizerImage = data["organizerImage"] as Image
     }
     
 }
