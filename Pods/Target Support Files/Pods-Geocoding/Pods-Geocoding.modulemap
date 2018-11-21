@@ -1,0 +1,6 @@
+framework module Pods_Geocoding {
+  umbrella header "Pods-Geocoding-umbrella.h"
+
+  export *
+  module * { export * }
+}
