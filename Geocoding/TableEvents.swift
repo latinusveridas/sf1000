@@ -105,6 +105,7 @@ class EventsTableViewController: UITableViewController {
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
+        
         if let organizerID = eventsList[indexPath.row].organizer as! String {
         
             // Building the URL    
@@ -113,6 +114,7 @@ class EventsTableViewController: UITableViewController {
             organizer_profile_picture = organizer_profile_picture + ".jpg"
             var imageURL = firstPartURL + organizer_profile_picture
             
+            //AlamofireImage request
             Alamofire.request(imageURL).responseImage(completionhandler: {response in 
                if let image = response.result.value {
                    DispatchQueue.main.async {
@@ -120,9 +122,7 @@ class EventsTableViewController: UITableViewController {
                    }
                }                                                          
             }
-        }
-
-        
+        }     
         return cell
     }
     
