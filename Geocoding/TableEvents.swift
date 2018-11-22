@@ -105,6 +105,7 @@ class EventsTableViewController: UITableViewController {
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
+        if let organizerID = eventsList[indexPath.row].organizer
         //cell.UIImage_OPP.image = "\(eventsList[indexPath.row].organizerImage)"
         
         return cell
