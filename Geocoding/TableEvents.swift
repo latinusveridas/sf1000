@@ -105,8 +105,23 @@ class EventsTableViewController: UITableViewController {
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
-        if let organizerID = eventsList[indexPath.row].organizer
-        //cell.UIImage_OPP.image = "\(eventsList[indexPath.row].organizerImage)"
+        if let organizerID = eventsList[indexPath.row].organizer as! String {
+        
+            // Building the URL    
+            var firstPartURL = "http://83.217.132.102:3000/"
+            var organizer_profile_picture = organizerID.replacingOccurrences(of: "_U_", with: "_UPP_")
+            organizer_profile_picture = organizer_profile_picture + ".jpg"
+            var imageURL = firstPartURL + organizer_profile_picture
+            
+            Alamofire.request(imageURL).responseImage(completionhandler: {response in 
+               if let image = response.result.value {
+                   DispatchQueue.main.async {
+                       cell.UIImageOrganizer?.image = image
+                   }
+               }                                                          
+            }
+        }
+
         
         return cell
     }
@@ -141,7 +156,7 @@ public class eventClass {
     let nb_part_max : Int
     let price_per_part : Int
     let organizer : String
-    //let organizerImage : Image
+
     
     init(data: [String:Any]) {
         self.event_id = data["event_id"] as! String
@@ -152,7 +167,7 @@ public class eventClass {
         self.nb_part_max = data["nb_part_max"] as! Int
         self.price_per_part = data["price_per_part"] as! Int
         self.organizer = data["organizer"] as! String
-        //self.organizerImage = data["organizerImage"] as Image
+
     }
     
 }
