@@ -102,10 +102,13 @@ class EventsTableViewController: UITableViewController {
         cell.labelDate.text = eventsList[indexPath.row].date
         cell.labelLocation.text = eventsList[indexPath.row].location
         cell.labelSport.text = eventsList[indexPath.row].sport
+        
+        // Not string data converted to String
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
         
+        // Last Step : Image download through AlamofireImage
         if let organizerID = eventsList[indexPath.row].organizer as! String {
         
             // Building the URL    
