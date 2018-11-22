@@ -116,7 +116,7 @@ class EventsTableViewController: UITableViewController {
             Alamofire.request(imageURL).responseImage(completionhandler: {response in 
                if let image = response.result.value {
                    DispatchQueue.main.async {
-                       cell.UIImageOrganizer?.image = image
+                       cell.UIImage_OPP?.image = image
                    }
                }                                                          
             }
