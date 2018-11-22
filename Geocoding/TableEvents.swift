@@ -7,7 +7,9 @@ import SwiftyJSON
 class EventsTableViewController: UITableViewController {
     
     var eventsList: [eventClass] = []
+
     
+// =========================== LOADING OF THE VIEW ========================================== 
     override func viewDidLoad() {
         super.viewDidLoad()
         AlamoGetEvent{ eventsList in
@@ -25,7 +27,7 @@ class EventsTableViewController: UITableViewController {
     }
     
 
-    
+ // =========================== MAIN FUNCTIONS ==========================================    
     func AlamoGetEvent (completion: @escaping ([eventClass]?) -> Void) {
         
         var targetURL = "http://83.217.132.102:3000/events/all"
