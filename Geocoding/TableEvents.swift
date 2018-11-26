@@ -30,7 +30,7 @@ class EventsTableViewController: UITableViewController {
  // =========================== MAIN FUNCTIONS ==========================================    
     func AlamoGetEvent (completion: @escaping ([eventClass]?) -> Void) {
         
-        var targetURL = "http://83.217.132.102:3000/events/all"
+        var targetURL = "http://83.217.132.102:3000/events/innerjoin"
         
         Alamofire.request(targetURL,method: .get)
             .validate()
@@ -52,47 +52,6 @@ class EventsTableViewController: UITableViewController {
     }
     
     
-//////////////////DEBUG//////////
-    @IBAction func DEBUG_action(_ sender: Any) {
-        AlamoPicture{ myImage in
-          
-        }
-    }
-    
-    
-    
-    func AlamoPicture(completion : @escaping (UIImage)-> Void) {
-        
-        print("in debug func")
-        
-        var firstPartURL = "http://83.217.132.102:3000/"
-        
-        //Conversion module
-        var organizerID = eventsList[0].organizer
-        
-        var organizer_profile_picture = organizerID.replacingOccurrences(of: "_U_", with: "_UPP_")
-        
-        organizer_profile_picture = organizer_profile_picture + ".jpg"
-        
-        var OPP = firstPartURL + organizer_profile_picture
-        
-        print(OPP)
-
-        Alamofire.request(OPP, method: .get).responseImage { response in
-            print(response.request)
-            print(response.response)
-            debugPrint(response.result)
-            guard let image = response.result.value else {return}
-            completion(image)
-            
-        }
-            
-        
-        
-    }
-    
-//////////////////DEBUG//////////
-    
 // ============================== TABLE FUNCTIONS ============================
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eventsList.count
@@ -104,6 +63,7 @@ class EventsTableViewController: UITableViewController {
         cell.labelDate.text = eventsList[indexPath.row].date
         cell.labelLocation.text = eventsList[indexPath.row].location
         cell.labelSport.text = eventsList[indexPath.row].sport
+        cell.labelFirstName.text = eventsList[indexPath.row].first_name
         
         // Not string data converted to String
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
@@ -111,23 +71,25 @@ class EventsTableViewController: UITableViewController {
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
         
         // Last Step : Image download through AlamofireImage
-        if let organizerID = eventsList[indexPath.row].organizer as! String {
+        if let organizerID = eventsList[indexPath.row].organizer_id as? String {
         
             // Building the URL    
             var firstPartURL = "http://83.217.132.102:3000/"
-            var organizer_profile_picture = organizerID.replacingOccurrences(of: "_U_", with: "_UPP_")
+            var organizer_profile_picture = organizerID.replacingOccurrences(of: "_O_", with: "_OPP_")
             organizer_profile_picture = organizer_profile_picture + ".jpg"
             var imageURL = firstPartURL + organizer_profile_picture
+            print(imageURL)
             
             //AlamofireImage request
-            Alamofire.request(imageURL).responseImage(completionhandler: {response in 
+            Alamofire.request(imageURL).responseImage(completionHandler: {response in
                if let image = response.result.value {
                    DispatchQueue.main.async {
                        cell.UIImage_OPP?.image = image
                    }
                }                                                          
-            }
-        }     
+            })
+        }
+        
         return cell
     }
     
@@ -148,6 +110,7 @@ class eventUICell: UITableViewCell {
     @IBOutlet weak var labelPart_max: UILabel!
     @IBOutlet weak var labelPrice_max: UILabel!
     @IBOutlet weak var UIImage_OPP: UIImageView!
+    @IBOutlet weak var labelFirstName: UILabel!
     
 }
 
@@ -160,7 +123,8 @@ public class eventClass {
     let nb_part_sub : Int
     let nb_part_max : Int
     let price_per_part : Int
-    let organizer : String
+    let organizer_id : String
+    let first_name : String
 
     
     init(data: [String:Any]) {
@@ -171,7 +135,8 @@ public class eventClass {
         self.nb_part_sub = data["nb_part_sub"] as! Int
         self.nb_part_max = data["nb_part_max"] as! Int
         self.price_per_part = data["price_per_part"] as! Int
-        self.organizer = data["organizer"] as! String
+        self.organizer_id = data["organizer_id"] as! String
+        self.first_name = data["first_name"] as! String
 
     }
     

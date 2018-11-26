@@ -9,40 +9,222 @@
 import Foundation
 import UIKit
 import Alamofire
+import SwiftyJSON
 
 class LoginView: UIViewController {
     
     
     @IBOutlet weak var field_email: UITextField!
     @IBOutlet weak var field_password: UITextField!
+    
     @IBAction func Action_Go(_ sender: Any) {
-        AlamoLogin()
+        
+        AlamoLogin(email: field_email.text!, password: field_password.text!) { jwt1 in
+            let defaults = UserDefaults.standard
+            defaults.set(jwt1, forKey: "jwt1")
+            print("Stored JWT1 in UserDefault Memory: ", defaults.string(forKey: "jwt1")!)
+        }
     }
     
+    @IBAction func closebutton(_ sender: Any) {
+        dismiss(animated: true, completion:  nil)
+    }
     
-    
-    
-    
-    
-// ====== Main functions ===================
-    func AlamoLogin () {
+    @IBAction func Action_Refresh(_ sender: Any) {
         
-        var targetURL = "http://83.217.132.102:3000/doubletoken/login"
-        Alamofire.request(targetURL)
-        .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    print("Validation success")
-                case .failure(let error):
-                    print(error)
-                }
-                
+        let MemJwt1 = UserDefaults.standard.string(forKey: "jwt1")
+        
+        //FOR DEBUG IT WAS jwt1: MemJwt1!
+        RefreshRequest(jwt1: MemJwt1!) { jwt2 in
+            
+            // Retrieve UserDefaults Data Object
+            let defaults = UserDefaults.standard
+            // Adding jwt2 data in UserDefaults
+            defaults.set(jwt2, forKey: "jwt2")
+            // Testing : Getting the UserDefault data stored in the memory
+            print("Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2")!)
+            
         }
         
     }
     
+    @IBAction func Protected_Area_Action(_ sender: Any) {
+        
+        let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")
+        var resJSON: [String:Any]
+        
+        ProtectedRequest(jwt2: MemJwt2!) { resJSON in
+        print(resJSON)
+            
+            
+        }
     
+    }
+    
+    @IBAction func ACTION_DEBUG_SERIALIZATION(_ sender: Any) {
+        
+    }
+    
+    
+// ======================================== Main functions ================================================
+
+    
+    func ProtectedRequest (jwt2: String, completion: @escaping ([String:Any]) -> Void) {
+        let targetURL = "http://83.217.132.102:3000/auth/protectedpage"
+        let url = URL(string: targetURL)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.get.rawValue
+        request.setValue(jwt2, forHTTPHeaderField: "jwt2")
+        
+        Alamofire.request(request).responseJSON{ response in
+
+            guard let json = response.result.value as? [String:Any] else {return}
+            
+            completion(json)
+
+        }
+    }
+    
+    func RefreshRequest (jwt1: String, completion: @escaping (String) -> Void) {
+        
+        let targetURL = "http://83.217.132.102:3000/auth/refresh"
+        let url = URL(string: targetURL)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.post.rawValue
+        request.setValue(jwt1, forHTTPHeaderField: "jwt1")
+        
+        Alamofire.request(request).responseJSON { response in
+            
+            
+            //guard let json = response.result.value as? [String:Any] else {return}
+
+            //completion(String(describing: json["jwt2"]!))
+            print("REFRESH RESPONSE IS : ", response)
+            do {
+                let decoder = JSONDecoder()
+                let model = try decoder.decode(MainResStruct.self, from: response.data!)
+                
+                print("MY SUCCESS IS ", model.success)
+                
+                completion(model.data.jwt2)
+                
+                if model.success == 1 {
+                    let alertController = UIAlertController(title: "Welcome", message: "Refreshed", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alertController,animated: true,completion: nil)
+                }
+                
+            } catch {
+                
+                let alertController = UIAlertController(title: "Failure", message: "Refresh failed", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController,animated: true,completion: nil)
+            }
+
+        }
+        
+        
+        
+    }
+    
+    func AlamoLogin(email: String, password: String, completion: @escaping (String) -> Void) {
+        
+        let targetURL = "http://83.217.132.102:3000/auth/login"
+        let payloadDict = [
+            "email" : email,
+            "password" : password
+        ]
+        
+        guard let payLoad = try? JSONSerialization.data(withJSONObject: payloadDict, options: .prettyPrinted) else {return}
+        //print(String(data: payLoad, encoding: String.Encoding.utf8))
+        
+        let url = URL(string: targetURL)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.post.rawValue
+        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        request.httpBody = payLoad
+        
+        Alamofire.request(request).responseJSON { response in
+            print("MY RESPONSE IS: ", response)
+            do {
+                let decoder = JSONDecoder()
+                let model = try decoder.decode(MainResStruct.self, from: response.data!)
+                
+                //print("MY COMPLETION JWT1 IS",model.data.jwt1)
+                completion(model.data.jwt1)
+                
+                if model.success == 1 {
+                    let alertController = UIAlertController(title: "Welcome", message: "You're logged", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alertController,animated: true,completion: nil)
+                }
+ 
+            } catch {
+                let alertController = UIAlertController(title: "Failure", message: "You're logging failed", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController,animated: true,completion: nil)
+            }
+ 
+        }
+        
+    }
+    
+
+    
+}
+
+
+// =========================== Response Codable Structure ==============
+
+
+struct MainResStruct: Codable {
+    let error: Int
+    let errorDescription: String
+    let success: Int
+    let typeData: String
+    let data: LoginData
+    
+    enum CodingKeys: String, CodingKey {
+        case error
+        case errorDescription = "error_description"
+        case success
+        case typeData = "type_data"
+        case data
+    }
+}
+
+struct LoginData: Codable {
+    let fieldCount: Int
+    let affectedRows: Int
+    let insertId: Int
+    let serverStatus: Int
+    let warningCount: Int
+    let message: String
+    let protocol41: Bool
+    let changedRows: Int
+    let jwt1 : String
+    let jwt2 : String
+    
+    enum CodingKeys: String, CodingKey {
+        case fieldCount
+        case affectedRows
+        case insertId
+        case serverStatus
+        case warningCount
+        case message
+        case protocol41
+        case changedRows
+        case jwt1 = "JWT1"
+        case jwt2 = "JWT2"
+    }
+}
+
+struct RefreshData {
+    let jwt2: String
+    
+    enum CodingKeys: String, CodingKey {
+        case jwt2 = "JWT2"
+    }
 }
 
 
