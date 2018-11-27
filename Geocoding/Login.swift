@@ -182,7 +182,7 @@ struct MainResStruct: Codable {
     let errorDescription: String
     let success: Int
     let typeData: String
-    let data: LoginData
+    let data: AuthData
     
     enum CodingKeys: String, CodingKey {
         case error
@@ -193,17 +193,17 @@ struct MainResStruct: Codable {
     }
 }
 
-struct LoginData: Codable {
-    let fieldCount: Int
-    let affectedRows: Int
-    let insertId: Int
-    let serverStatus: Int
-    let warningCount: Int
-    let message: String
-    let protocol41: Bool
-    let changedRows: Int
-    let jwt1 : String
-    let jwt2 : String
+struct AuthData: Codable {
+    let fieldCount: Int?
+    let affectedRows: Int?
+    let insertId: Int?
+    let serverStatus: Int?
+    let warningCount: Int?
+    let message: String?
+    let protocol41: Bool?
+    let changedRows: Int?
+    let jwt1 : String?
+    let jwt2 : String?
     
     enum CodingKeys: String, CodingKey {
         case fieldCount
@@ -219,13 +219,6 @@ struct LoginData: Codable {
     }
 }
 
-struct RefreshData {
-    let jwt2: String
-    
-    enum CodingKeys: String, CodingKey {
-        case jwt2 = "JWT2"
-    }
-}
 
 
 
