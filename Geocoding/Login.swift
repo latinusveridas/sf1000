@@ -13,6 +13,12 @@ import SwiftyJSON
 
 class LoginView: UIViewController {
     
+    override func viewDidLoad() {
+        let defaults = UserDefaults.standard
+        print("START DEBUG : Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2")!)
+    }
+
+    
     
     @IBOutlet weak var field_email: UITextField!
     @IBOutlet weak var field_password: UITextField!
@@ -51,7 +57,6 @@ class LoginView: UIViewController {
     @IBAction func Protected_Area_Action(_ sender: Any) {
         
         let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")
-        var resJSON: [String:Any]
         
         ProtectedRequest(jwt2: MemJwt2!) { resJSON in
         print(resJSON)
@@ -70,16 +75,16 @@ class LoginView: UIViewController {
 
     
     func ProtectedRequest (jwt2: String, completion: @escaping ([String:Any]) -> Void) {
-        let targetURL = "http://83.217.132.102:3000/auth/protectedpage"
+        let targetURL = "http://83.217.132.102:3000/auth/all"
         let url = URL(string: targetURL)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue
         request.setValue(jwt2, forHTTPHeaderField: "jwt2")
         
         Alamofire.request(request).responseJSON{ response in
-
+            print(response)
             guard let json = response.result.value as? [String:Any] else {return}
-            
+            print(json.description)
             completion(json)
 
         }
@@ -95,18 +100,11 @@ class LoginView: UIViewController {
         
         Alamofire.request(request).responseJSON { response in
             
-            
-            //guard let json = response.result.value as? [String:Any] else {return}
-
-            //completion(String(describing: json["jwt2"]!))
-            print("REFRESH RESPONSE IS : ", response)
             do {
                 let decoder = JSONDecoder()
                 let model = try decoder.decode(MainResStruct.self, from: response.data!)
                 
-                print("MY SUCCESS IS ", model.success)
-                
-                completion(model.data.jwt2)
+                completion(model.data!.jwt2!)
                 
                 if model.success == 1 {
                     let alertController = UIAlertController(title: "Welcome", message: "Refreshed", preferredStyle: UIAlertControllerStyle.alert)
@@ -145,13 +143,13 @@ class LoginView: UIViewController {
         request.httpBody = payLoad
         
         Alamofire.request(request).responseJSON { response in
-            print("MY RESPONSE IS: ", response)
+            //print("MY RESPONSE IS: ", response)
             do {
                 let decoder = JSONDecoder()
                 let model = try decoder.decode(MainResStruct.self, from: response.data!)
                 
-                //print("MY COMPLETION JWT1 IS",model.data.jwt1)
-                completion(model.data.jwt1)
+                //print(model)
+                completion(model.data!.jwt1!)
                 
                 if model.success == 1 {
                     let alertController = UIAlertController(title: "Welcome", message: "You're logged", preferredStyle: UIAlertControllerStyle.alert)
