@@ -182,7 +182,7 @@ struct MainResStruct: Codable {
     let errorDescription: String
     let success: Int
     let typeData: String
-    let data: AuthData
+    let data: AuthData?
     
     enum CodingKeys: String, CodingKey {
         case error
