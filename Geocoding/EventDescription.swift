@@ -12,6 +12,10 @@ import UIKit
 
 class EventDescriptionController: UIViewController {
     
+    var LocationData: String?
+    var LatitudeData: String?
+    var LongitudeData: String?
+    
     @IBOutlet weak var LocationLabel: UILabel!
     @IBOutlet weak var LatitudeLabel: UILabel!
     @IBOutlet weak var LongitudeLabel: UILabel!
