@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		27BECD1C041B72DFBF495BA2 /* Pods_Geocoding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0DBAFA4BF44A1420E70E5D4 /* Pods_Geocoding.framework */; };
 		660575D521A1C79900965D5E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660575D421A1C79900965D5E /* FirstViewController.swift */; };
+		6640FAC621AF1CCF0041CAA9 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6640FAC521AF1CCF0041CAA9 /* RegisterView.swift */; };
 		66461D4121A092D3006D3353 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66461D4021A092D3006D3353 /* AppDelegate.swift */; };
 		66461D4321A092D3006D3353 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66461D4221A092D3006D3353 /* ViewController.swift */; };
 		66461D4621A092D3006D3353 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66461D4421A092D3006D3353 /* Main.storyboard */; };
 		66461D4821A092D4006D3353 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66461D4721A092D4006D3353 /* Assets.xcassets */; };
 		66461D4B21A092D4006D3353 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66461D4921A092D4006D3353 /* LaunchScreen.storyboard */; };
 		66461D5321A09308006D3353 /* TableEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66461D5221A09308006D3353 /* TableEvents.swift */; };
+		664E81A521B06EEB00F723D9 /* EventDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664E81A421B06EEB00F723D9 /* EventDescription.swift */; };
 		6654A76421A1B875005A0F37 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6654A76321A1B875005A0F37 /* Login.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,6 +24,7 @@
 		0FD6F81E78C697074A89D206 /* Pods-Geocoding.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Geocoding.release.xcconfig"; path = "Pods/Target Support Files/Pods-Geocoding/Pods-Geocoding.release.xcconfig"; sourceTree = "<group>"; };
 		5B1EAB12055C4949645C22A1 /* Pods-Geocoding.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Geocoding.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Geocoding/Pods-Geocoding.debug.xcconfig"; sourceTree = "<group>"; };
 		660575D421A1C79900965D5E /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		6640FAC521AF1CCF0041CAA9 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		66461D3D21A092D3006D3353 /* Geocoding.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Geocoding.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66461D4021A092D3006D3353 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66461D4221A092D3006D3353 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -30,6 +33,7 @@
 		66461D4A21A092D4006D3353 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66461D4C21A092D4006D3353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66461D5221A09308006D3353 /* TableEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableEvents.swift; sourceTree = "<group>"; };
+		664E81A421B06EEB00F723D9 /* EventDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDescription.swift; sourceTree = "<group>"; };
 		6654A76321A1B875005A0F37 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		A0DBAFA4BF44A1420E70E5D4 /* Pods_Geocoding.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Geocoding.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -71,8 +75,10 @@
 				66461D4221A092D3006D3353 /* ViewController.swift */,
 				66461D5221A09308006D3353 /* TableEvents.swift */,
 				6654A76321A1B875005A0F37 /* Login.swift */,
-				66461D4421A092D3006D3353 /* Main.storyboard */,
+				6640FAC521AF1CCF0041CAA9 /* RegisterView.swift */,
 				660575D421A1C79900965D5E /* FirstViewController.swift */,
+				66461D4421A092D3006D3353 /* Main.storyboard */,
+				664E81A421B06EEB00F723D9 /* EventDescription.swift */,
 				66461D4721A092D4006D3353 /* Assets.xcassets */,
 				66461D4921A092D4006D3353 /* LaunchScreen.storyboard */,
 				66461D4C21A092D4006D3353 /* Info.plist */,
@@ -216,8 +222,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				660575D521A1C79900965D5E /* FirstViewController.swift in Sources */,
+				664E81A521B06EEB00F723D9 /* EventDescription.swift in Sources */,
 				66461D5321A09308006D3353 /* TableEvents.swift in Sources */,
 				66461D4321A092D3006D3353 /* ViewController.swift in Sources */,
+				6640FAC621AF1CCF0041CAA9 /* RegisterView.swift in Sources */,
 				66461D4121A092D3006D3353 /* AppDelegate.swift in Sources */,
 				6654A76421A1B875005A0F37 /* Login.swift in Sources */,
 			);
@@ -365,6 +373,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 967N6AN524;
 				INFOPLIST_FILE = Geocoding/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -383,6 +392,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 967N6AN524;
 				INFOPLIST_FILE = Geocoding/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

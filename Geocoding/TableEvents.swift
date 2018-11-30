@@ -6,7 +6,14 @@ import SwiftyJSON
 
 class EventsTableViewController: UITableViewController {
     
+    // When data is received, it's filled in eventsList
     var eventsList: [eventClass] = []
+    
+    // Data for segue description
+    var eventsID: String?
+    var Passedlocation: String?
+    var latitude: String?
+    var longitude: String?
 
     
 // =========================== LOADING OF THE VIEW ========================================== 
@@ -64,12 +71,14 @@ class EventsTableViewController: UITableViewController {
         cell.labelLocation.text = eventsList[indexPath.row].location
         cell.labelSport.text = eventsList[indexPath.row].sport
         cell.labelFirstName.text = eventsList[indexPath.row].first_name
+        cell.labelLatitude.text = eventsList[indexPath.row].latitude
+        cell.labelLongitude.text = eventsList[indexPath.row].longitude
         
         // Not string data converted to String
         cell.labelSubscribed.text = "\(eventsList[indexPath.row].nb_part_sub)"
         cell.labelPart_max.text = "\(eventsList[indexPath.row].nb_part_max)"
         cell.labelPrice_max.text = "\(eventsList[indexPath.row].price_per_part)"
-        
+
         // Last Step : Image download through AlamofireImage
         if let organizerID = eventsList[indexPath.row].organizer_id as? String {
         
@@ -97,7 +106,33 @@ class EventsTableViewController: UITableViewController {
         return 1
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // Get values to retrieve in the cell
+        let indexPath = tableView.indexPathForSelectedRow!
+        let currentCell = tableView.cellForRow(at: indexPath) as! eventUICell
+        let eventsID = currentCell.labelEvent_id.text
+        let latitude = currentCell.labelLatitude.text
+        let longitude = currentCell.labelLongitude.text
+        let Passedlocation = currentCell.labelLocation.text
+        print(Passedlocation!)
+        performSegue(withIdentifier: "cellSelectionSegue", sender: self)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "cellSelectionSegue") {
+            var viewController = segue.destination as! EventDescriptionController
+            viewController.LocationLabel.text = Passedlocation!
+            viewController.LatitudeLabel.text = latitude!
+            viewController.LongitudeLabel.text = longitude!
+            
+        }
+    }
+    
 }
+
+
 
 // ================= CELL CONFIGURATION ================================
 class eventUICell: UITableViewCell {
@@ -111,6 +146,8 @@ class eventUICell: UITableViewCell {
     @IBOutlet weak var labelPrice_max: UILabel!
     @IBOutlet weak var UIImage_OPP: UIImageView!
     @IBOutlet weak var labelFirstName: UILabel!
+    @IBOutlet weak var labelLatitude: UILabel!
+    @IBOutlet weak var labelLongitude: UILabel!
     
 }
 
@@ -125,6 +162,8 @@ public class eventClass {
     let price_per_part : Int
     let organizer_id : String
     let first_name : String
+    let latitude: String?
+    let longitude: String?
 
     
     init(data: [String:Any]) {
@@ -137,7 +176,9 @@ public class eventClass {
         self.price_per_part = data["price_per_part"] as! Int
         self.organizer_id = data["organizer_id"] as! String
         self.first_name = data["first_name"] as! String
-
+        self.latitude = data["latitude"] as? String
+        self.longitude = data["longitude"] as? String
+ 
     }
     
 }

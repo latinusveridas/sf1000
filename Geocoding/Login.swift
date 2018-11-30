@@ -66,11 +66,7 @@ class LoginView: UIViewController {
     
     }
     
-    @IBAction func ACTION_DEBUG_SERIALIZATION(_ sender: Any) {
-        
-    }
-    
-    
+
 // ======================================== Main functions ================================================
 
     
