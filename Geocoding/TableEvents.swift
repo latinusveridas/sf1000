@@ -123,9 +123,9 @@ class EventsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "cellSelectionSegue") {
             var viewController = segue.destination as! EventDescriptionController
-            viewController.LocationLabel.text = Passedlocation!
-            viewController.LatitudeLabel.text = latitude!
-            viewController.LongitudeLabel.text = longitude!
+            viewController.locationData = Passedlocation
+            viewController.latitudeData = latitude
+            viewController.longitudeData = longitude
             
         }
     }
