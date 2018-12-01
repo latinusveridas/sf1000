@@ -11,7 +11,7 @@ class EventsTableViewController: UITableViewController {
     
     // Data for segue description
     var eventsID: String?
-    var Passedlocation: String?
+    var location: String?
     var latitude: String?
     var longitude: String?
 
@@ -107,27 +107,14 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detail: EventDescriptionController
+        detail = self.storyboard?.instantiateViewController(withIdentifier: "EventDescriptionController") as! EventDescriptionController
+        self.navigationController?.pushViewController(detail, animated: true)
         
-        // Get values to retrieve in the cell
-        let indexPath = tableView.indexPathForSelectedRow!
-        let currentCell = tableView.cellForRow(at: indexPath) as! eventUICell
-        let eventsID = currentCell.labelEvent_id.text
-        let latitude = currentCell.labelLatitude.text
-        let longitude = currentCell.labelLongitude.text
-        let Passedlocation = currentCell.labelLocation.text
-        print(Passedlocation!)
-        performSegue(withIdentifier: "cellSelectionSegue", sender: self)
+        detail.LocationData = eventsList[indexPath.row].location
+        detail.LatitudeData = eventsList[indexPath.row].latitude
+        detail.LongitudeData = eventsList[indexPath.row].longitude
         
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "cellSelectionSegue") {
-            var viewController = segue.destination as! EventDescriptionController
-            viewController.locationData = Passedlocation
-            viewController.latitudeData = latitude
-            viewController.longitudeData = longitude
-            
-        }
     }
     
 }

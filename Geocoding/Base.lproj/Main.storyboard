@@ -540,7 +540,7 @@
         <!--Event Description Controller-->
         <scene sceneID="MnK-jO-zeC">
             <objects>
-                <viewController id="TWm-ap-p3Q" customClass="EventDescriptionController" customModule="Geocoding" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventDescriptionController" id="TWm-ap-p3Q" customClass="EventDescriptionController" customModule="Geocoding" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WWD-2G-fnH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -596,6 +596,7 @@
                         <viewLayoutGuide key="safeArea" id="pSD-tT-gt2"/>
                     </view>
                     <connections>
+                        <outlet property="DescriptionMap" destination="P4d-PF-u4z" id="iUv-Ol-8LJ"/>
                         <outlet property="LatitudeLabel" destination="gYp-JN-bO4" id="AiU-Kl-3Ub"/>
                         <outlet property="LocationLabel" destination="hBo-wo-CK5" id="9QC-CZ-dag"/>
                         <outlet property="LongitudeLabel" destination="ngZ-GO-EVb" id="BWQ-81-R7B"/>
