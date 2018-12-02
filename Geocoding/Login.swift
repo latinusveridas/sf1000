@@ -15,7 +15,7 @@ class LoginView: UIViewController {
     
     override func viewDidLoad() {
         let defaults = UserDefaults.standard
-        print("START DEBUG : Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2")!)
+        print("START DEBUG : Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2"))
     }
 
     
