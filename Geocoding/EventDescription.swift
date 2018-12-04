@@ -22,6 +22,7 @@ class EventDescriptionController: UIViewController {
     var LocationData: String?
     var LatitudeData: String?
     var LongitudeData: String?
+    var eventLocation: CLLocationCoordinate2D?
     
     @IBOutlet weak var LocationLabel: UILabel!
     @IBOutlet weak var LatitudeLabel: UILabel!
@@ -32,6 +33,16 @@ class EventDescriptionController: UIViewController {
         LatitudeLabel.text = LatitudeData
         LongitudeLabel.text = LongitudeData
         
+        let eventLocation = CLLocationCoordinate2D(latitude: Double(LatitudeData!)!, longitude: Double(LongitudeData!)!)
+        
+        checkLocationServices()
+        
+        // Artwork
+        let artwork = Artwork(title: "MyEvent",
+                              locationName: "Location of the event",
+                              discipline: "Sculpture",
+                              coordinate: eventLocation)
+        DescriptionMap.addAnnotation(artwork)
     }
     
     func setupLocationManager() {
@@ -41,8 +52,11 @@ class EventDescriptionController: UIViewController {
     
     
     func centerViewOnUserLocation() {
+        
+        
+        
         if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+            let region = MKCoordinateRegionMakeWithDistance(location, regionInMeters, regionInMeters)
             DescriptionMap.setRegion(region, animated: true)
         }
     }
@@ -86,7 +100,7 @@ extension EventDescriptionController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        let region = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+        let region = MKCoordinateRegionMakeWithDistance(location.coordinate, regionInMeters, regionInMeters)
         DescriptionMap.setRegion(region, animated: true)
     }
     

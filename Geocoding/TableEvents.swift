@@ -37,7 +37,7 @@ class EventsTableViewController: UITableViewController {
  // =========================== MAIN FUNCTIONS ==========================================    
     func AlamoGetEvent (completion: @escaping ([eventClass]?) -> Void) {
         
-        var targetURL = "http://83.217.132.102:3000/events/innerjoin"
+        let targetURL = "http://83.217.132.102:3000/events/innerjoin"
         
         Alamofire.request(targetURL,method: .get)
             .validate()
@@ -48,7 +48,7 @@ class EventsTableViewController: UITableViewController {
                 guard let rawInventory = response.result.value as? [[String:Any]?] else {return completion(nil)}
                 
                 let inventory = rawInventory.flatMap { EvenDict -> eventClass? in
-                    var data = EvenDict!
+                    let data = EvenDict!
                     return eventClass(data: data)
                 }
                 
@@ -83,10 +83,10 @@ class EventsTableViewController: UITableViewController {
         if let organizerID = eventsList[indexPath.row].organizer_id as? String {
         
             // Building the URL    
-            var firstPartURL = "http://83.217.132.102:3000/"
+            let firstPartURL = "http://83.217.132.102:3000/"
             var organizer_profile_picture = organizerID.replacingOccurrences(of: "_O_", with: "_OPP_")
             organizer_profile_picture = organizer_profile_picture + ".jpg"
-            var imageURL = firstPartURL + organizer_profile_picture
+            let imageURL = firstPartURL + organizer_profile_picture
             print(imageURL)
             
             //AlamofireImage request
