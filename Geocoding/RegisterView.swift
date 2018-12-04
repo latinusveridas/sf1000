@@ -12,6 +12,10 @@ import Alamofire
 
 class RegisterView: UIViewController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.HideKeyboard()
+    }
     
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
@@ -112,4 +116,22 @@ struct dataSQL: Codable {
     let message: String?
     let protocol41: Bool?
     let changedRows: Int?
+}
+
+extension UIViewController {
+    
+    func HideKeyboard(){
+        let Tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DismissKeyboard))
+        
+        view.addGestureRecognizer(Tap)
+        
+    }
+    
+    @objc func DismissKeyboard() {
+        
+        view.endEditing(true)
+        
+    }
+    
+    
 }
