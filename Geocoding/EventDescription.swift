@@ -53,12 +53,11 @@ class EventDescriptionController: UIViewController {
     
     func centerViewOnUserLocation() {
         
-        
-        
-        if let location = locationManager.location?.coordinate {
+       if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegionMakeWithDistance(location, regionInMeters, regionInMeters)
             DescriptionMap.setRegion(region, animated: true)
         }
+        
     }
     
     
@@ -99,8 +98,13 @@ class EventDescriptionController: UIViewController {
 extension EventDescriptionController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
+        
+        /*guard let location = locations.last else { return }
         let region = MKCoordinateRegionMakeWithDistance(location.coordinate, regionInMeters, regionInMeters)
+        DescriptionMap.setRegion(region, animated: true) */
+        
+        let eventLocation = CLLocationCoordinate2D(latitude: Double(LatitudeData!)!, longitude: Double(LongitudeData!)!)
+        let region = MKCoordinateRegionMakeWithDistance(eventLocation, regionInMeters, regionInMeters)
         DescriptionMap.setRegion(region, animated: true)
     }
     
