@@ -15,7 +15,7 @@ class LoginView: UIViewController {
     
     override func viewDidLoad() {
         let defaults = UserDefaults.standard
-        print("START DEBUG : Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2"))
+        print("LOADING VIEW DEBUG : Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2"))
     }
 
     
@@ -66,6 +66,68 @@ class LoginView: UIViewController {
     
     }
     
+    @IBAction func click_CollectEventJWT2(_ sender: Any) {
+        
+        
+        
+        // On definie URL et JWT2
+        let targetURL = "http://83.217.132.102:3000/auth/experlogin/innerjoin"
+        let MemJwt1 = UserDefaults.standard.string(forKey: "jwt1")
+        let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")
+        
+        var AttemptsCounter = 0
+        
+        var GetResponse: String? = ""
+        
+                        AlamoGetEventProtectedArea(targetURL: targetURL, jwt2: MemJwt2!) { response in
+                            print("RESPONSE IS ", response["statusCode"]!)
+                            
+                            var code = response["statusCode"] as! String
+                            
+                            switch code {
+                                
+                            case "500":
+                                print("500")
+                            case "200":
+                                print("200")
+                                
+                            default: break
+                        
+                            }
+                            
+                 
+                        }
+        
+    }
+        
+       
+        
+       /* while GetResponse! == "" {
+            
+            AttemptsCounter = AttemptsCounter + 1
+            print("ATTEMPT COUNT",AttemptsCounter)
+            
+            switch AttemptsCounter {
+                
+            case ..<4:
+                        LoginView().RefreshRequest(jwt1: MemJwt1!) { response in }
+                        AlamoGetEventProtectedArea(targetURL: targetURL, jwt2: MemJwt2!) { response in
+                            print(response)
+                            GetResponse = response as? String
+                        }
+                        
+                        print("MY GETRESPONSE IS", GetResponse)
+                
+            default: break
+                
+            }
+            
+            
+        }
+        
+        */
+    
+
 
 // ======================================== Main functions ================================================
 
@@ -116,9 +178,6 @@ class LoginView: UIViewController {
             }
 
         }
-        
-        
-        
     }
     
     func AlamoLogin(email: String, password: String, completion: @escaping (String) -> Void) {
@@ -162,11 +221,9 @@ class LoginView: UIViewController {
         }
         
     }
-    
-
-    
+  
+    // END CLASS
 }
-
 
 // =========================== Response Codable Structure ==============
 
@@ -215,4 +272,77 @@ struct AuthData: Codable {
 
 
 
+
+
+// ========== DEBUG ============
+func AlamoGetEventProtectedArea (targetURL: String,jwt2: String, completion: @escaping ([String:Any]) -> Void) {
+    let url = URL(string: targetURL)!
+    var request = URLRequest(url: url)
+    request.httpMethod = HTTPMethod.get.rawValue
+    request.setValue(jwt2, forHTTPHeaderField: "jwt2")
+    
+    
+    Alamofire.request(request)
+        .responseJSON { response in
+            
+            let httpStatusCode = response.response?.statusCode
+            var result: [String:Any] = [:]
+            
+            switch (httpStatusCode) {
+                
+            case 200:
+                print("THE SUCCESS")
+                result["statusCode"] = 200
+                result["response"] = response.result.description
+                completion(result)
+                
+            case 500:
+                print("THE FAIL")
+                result["statusCode"] = 500
+                result["response"] = ""
+                
+                // Refresh launching
+                let MemJwt1 = UserDefaults.standard.string(forKey: "jwt1")
+                RefreshRequest2(jwt1: MemJwt1!) { jwt2 in
+                    let defaults = UserDefaults.standard
+                    defaults.set(jwt2, forKey: "jwt2")
+                    print("Stored JWT2 in UserDefault Memory: ", defaults.string(forKey: "jwt2")!)
+                    
+                    completion(["Test":"Any"])
+                }
+                
+                
+            default: break
+                
+            }
+    }
+    
+}
+
+
+func RefreshRequest2 (jwt1: String, completion: @escaping (String) -> Void) {
+    
+    let targetURL = "http://83.217.132.102:3000/auth/refresh"
+    let url = URL(string: targetURL)!
+    var request = URLRequest(url: url)
+    request.httpMethod = HTTPMethod.post.rawValue
+    request.setValue(jwt1, forHTTPHeaderField: "jwt1")
+    
+    Alamofire.request(request).responseJSON { response in
+        
+        
+            //let decoder = JSONDecoder()
+            //let model = try decoder.decode(MainResStruct.self, from: response.data!)
+        
+        
+            let myData = response.description
+            completion(myData)
+
+        
+        
+    }
+}
+
+
+// ========== DEBUG ============
 

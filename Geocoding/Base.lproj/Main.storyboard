@@ -64,6 +64,31 @@
             </objects>
             <point key="canvasLocation" x="664.79999999999995" y="139.880059970015"/>
         </scene>
+        <!--Augmented LoginVC-->
+        <scene sceneID="9B7-hY-SDP">
+            <objects>
+                <viewController id="G01-FK-3Jh" customClass="AugmentedLoginVC" customModule="Geocoding" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zQs-F3-6bT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rcH-yj-qwC">
+                                <rect key="frame" x="162" y="173" width="51" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Launch"/>
+                                <connections>
+                                    <action selector="ActionLaunch:" destination="G01-FK-3Jh" eventType="touchUpInside" id="b4b-Ya-mRt"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="jOa-ye-4tr"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UpK-aR-SgN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-214" y="896"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="3Aa-oD-alj">
             <objects>
@@ -86,6 +111,14 @@
                                 <state key="normal" title="Register"/>
                                 <connections>
                                     <segue destination="SBf-fI-4HM" kind="presentation" id="rVS-ZF-Clg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zhj-Nm-ab6">
+                                <rect key="frame" x="105" y="344" width="174" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="AlamoChainingVCDEBUG"/>
+                                <connections>
+                                    <segue destination="G01-FK-3Jh" kind="show" id="5Mw-qs-ozd"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -290,6 +323,14 @@
                                 <state key="normal" title="Protected Page"/>
                                 <connections>
                                     <action selector="Protected_Area_Action:" destination="TNS-wm-b78" eventType="touchUpInside" id="xie-pE-4j4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oFM-18-x6J">
+                                <rect key="frame" x="104" y="449" width="166" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="CollectEventsWithJWT2"/>
+                                <connections>
+                                    <action selector="click_CollectEventJWT2:" destination="TNS-wm-b78" eventType="touchUpInside" id="c95-nQ-fnm"/>
                                 </connections>
                             </button>
                         </subviews>

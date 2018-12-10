@@ -19,7 +19,9 @@ class EventsTableViewController: UITableViewController {
 // =========================== LOADING OF THE VIEW ========================================== 
     override func viewDidLoad() {
         super.viewDidLoad()
-        AlamoGetEvent{ eventsList in
+        let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")
+        let targetURL = "http://83.217.132.102:3000/events/innerjoin"
+        AlamoGetEvent(targetURL: targetURL,jwt2: MemJwt2!){ eventsList in
             guard eventsList != nil else {return}
             self.eventsList = eventsList!
             self.tableView.reloadData()
@@ -35,14 +37,23 @@ class EventsTableViewController: UITableViewController {
     
 
  // =========================== MAIN FUNCTIONS ==========================================    
-    func AlamoGetEvent (completion: @escaping ([eventClass]?) -> Void) {
+    func AlamoGetEvent (targetURL: String,jwt2: String, completion: @escaping ([eventClass]?) -> Void) {
         
-        let targetURL = "http://83.217.132.102:3000/events/innerjoin"
+        //let targetURL = "http://83.217.132.102:3000/events/innerjoin"
+        let url = URL(string: targetURL)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.get.rawValue
+        request.setValue(jwt2, forHTTPHeaderField: "jwt2")
         
-        Alamofire.request(targetURL,method: .get)
+        Alamofire.request(request)
             .validate()
             .responseJSON { response in
-                print(response)
+
+                //print(response)
+                
+                switch response.result {
+                
+                case .success:
                 
                 guard response.result.isSuccess else {return completion(nil)}
                 guard let rawInventory = response.result.value as? [[String:Any]?] else {return completion(nil)}
@@ -53,8 +64,18 @@ class EventsTableViewController: UITableViewController {
                 }
                 
                 completion(inventory)
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                    
+                    
+                }
+                
+                
                 
         }
+                
         
     }
     
