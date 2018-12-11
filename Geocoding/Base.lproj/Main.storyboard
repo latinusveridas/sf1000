@@ -80,6 +80,14 @@
                                     <action selector="ActionLaunch:" destination="G01-FK-3Jh" eventType="touchUpInside" id="b4b-Ya-mRt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2t-tn-65U">
+                                <rect key="frame" x="159" y="240" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Refresh"/>
+                                <connections>
+                                    <action selector="ActionRefresh:" destination="G01-FK-3Jh" eventType="touchUpInside" id="ESO-Gj-28O"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="jOa-ye-4tr"/>
