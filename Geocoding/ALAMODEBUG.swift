@@ -115,6 +115,7 @@ class AugmentedLoginVC: UIViewController {
         let jwt1 = UserDefaults.standard.string(forKey: "jwt1")
         let jwt2 = UserDefaults.standard.string(forKey: "jwt2")
         
+        print("PREDEBUG : ", jwt1)
         
         let SFTokenHandler = StreetFitTokenHandler(jwt1: jwt1, jwt2: jwt2,baseURLString: baseURLString)
         
