@@ -7,7 +7,8 @@ import UIKit
 class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
     private typealias RefreshCompletion = (_ succeeded: Bool, _ jwt1: String?, _ jwt2: String?) -> ()
     
-    private let sessionManager: SessionManager = {
+
+    let sessionManager: SessionManager = {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         
@@ -37,8 +38,9 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         if let urlString = urlRequest.url?.absoluteString, urlString.hasPrefix(baseURLString) {
             var urlRequest = urlRequest
-            print("DEBUG ADAPTER JWT IS", jwt1)
+            print("DEBUG ADAPTER JWT IS", jwt1!)
             urlRequest.setValue(jwt1, forHTTPHeaderField: "jwt1")
+            urlRequest.setValue(jwt2, forHTTPHeaderField: "jwt2")
             return urlRequest
         }
         
@@ -52,6 +54,7 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
             requestsToRetry.append(completion)
             
             if !isRefreshing {
+                print("Refresh is require, launching of the refreshToken function")
                 refreshToken { [weak self] succeeded, jwt1,jwt2 in
                     guard let strongSelf = self else {return}
                     
@@ -60,6 +63,7 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
                     if let jwt1 = jwt1, let jwt2 = jwt2 {
                         strongSelf.jwt1 = jwt1
                         strongSelf.jwt2 = jwt2
+                        
                     }
                     
                     strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
@@ -86,12 +90,18 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
         sessionManager.request(urlString, method: .post,encoding: JSONEncoding.default, headers: headers).responseJSON { [weak self] response in
             guard let strongSelf = self else { return }
             
+            let json = response.result.value as! [String:Any]
+            let data = json["data"] as! [String:Any]
+            let jwt2 = data["JWT2"] as? String
+            
             if
                 let json = response.result.value as? [String:Any],
-                let jwt1 = json["jwt1"] as? String,
-                let jwt2 = json["jwt2"] as? String
+                let data = json["data"] as? [String:Any],
+                let jwt2 = data["JWT2"] as? String
+
             {
-                completion(true,jwt1,jwt2)
+                UserDefaults.standard.set(jwt2, forKey: "jwt2")
+                completion(true,self?.jwt1,jwt2)
             } else {
                 completion(false,nil,nil)
             }
@@ -108,19 +118,17 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
 class AugmentedLoginVC: UIViewController {
     
     override func viewDidLoad() {
-        
     }
     
     @IBAction func ActionLaunch(_ sender: Any) {
         let baseURLString = "http://83.217.132.102:3000/"
         let jwt1 = UserDefaults.standard.string(forKey: "jwt1")
         let jwt2 = UserDefaults.standard.string(forKey: "jwt2")
-        
-        print("PREDEBUG : ", jwt1)
+
         
         let SFTokenHandler = StreetFitTokenHandler(jwt1: jwt1, jwt2: jwt2,baseURLString: baseURLString)
         
-        let sessionManager = SessionManager()
+        let sessionManager = SFTokenHandler.sessionManager
         
         sessionManager.adapter = SFTokenHandler
         sessionManager.retrier = SFTokenHandler
@@ -136,31 +144,7 @@ class AugmentedLoginVC: UIViewController {
     }
     
     @IBAction func ActionRefresh(_ sender: Any) {
-        
-        // Debug original request 
-        
-        let baseURLString = "http://83.217.132.102:3000/"
-        let jwt1 = UserDefaults.standard.string(forKey: "jwt1")
-        let jwt2 = UserDefaults.standard.string(forKey: "jwt2")
-        
-        print("PREDEBUG : ", jwt1)
-        
-        let SFTokenHandler = StreetFitTokenHandler(jwt1: jwt1, jwt2: jwt2,baseURLString: baseURLString)
-        
-        let sessionManager = SessionManager()
-        
-        //sessionManager.adapter = SFTokenHandler
-        //sessionManager.retrier = SFTokenHandler
-        
-        let urlString = "http://83.217.132.102:3000/auth/experlogin/innerjoin"
-        
-        sessionManager.request(urlString).validate().responseJSON{response in
-            
-            debugPrint(response)
-            
-        }     
-        
-        
+ 
     }
 
     
