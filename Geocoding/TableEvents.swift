@@ -6,6 +6,8 @@ import SwiftyJSON
 
 class EventsTableViewController: UITableViewController {
     
+// =========================== VARIABLES ==========================================
+    
     // When data is received, it's filled in eventsList
     var eventsList: [eventClass] = []
     
@@ -16,9 +18,12 @@ class EventsTableViewController: UITableViewController {
     var longitude: String?
 
     
-// =========================== LOADING OF THE VIEW ========================================== 
+// =========================== LOADING OF THE VIEW ==========================================
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Refresh at ViewController loading
         let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")
         let targetURL = "http://83.217.132.102:3000/events/innerjoin"
         AlamoGetEvent(targetURL: targetURL,jwt2: MemJwt2!){ eventsList in
@@ -26,8 +31,17 @@ class EventsTableViewController: UITableViewController {
             self.eventsList = eventsList!
             self.tableView.reloadData()
         }
- 
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Refreshing...")
+        refreshControl.addTarget(self, action: #selector(DEBUGCOLLECTTOPULL), for: UIControlEvents.valueChanged)
+        
+        if #available(iOS 10.0, *) {
+            self.tableView.refreshControl = refreshControl
+        } else {
+            self.tableView.addSubview(refreshControl)
+        }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -55,31 +69,85 @@ class EventsTableViewController: UITableViewController {
                 
                 case .success:
                 
-                guard response.result.isSuccess else {return completion(nil)}
-                guard let rawInventory = response.result.value as? [[String:Any]?] else {return completion(nil)}
-                
-                let inventory = rawInventory.flatMap { EvenDict -> eventClass? in
-                    let data = EvenDict!
-                    return eventClass(data: data)
-                }
-                
-                completion(inventory)
+                    guard response.result.isSuccess else {return completion(nil)}
+                    guard let rawInventory = response.result.value as? [[String:Any]?] else {return completion(nil)}
+                    
+                    let inventory = rawInventory.flatMap { EvenDict -> eventClass? in
+                        let data = EvenDict!
+                        return eventClass(data: data)
+                    }
+                    completion(inventory)
                     
                 case .failure(let error):
                     print(error)
-                    
-                    
-                    
+             
                 }
-                
-                
-                
+ 
         }
-                
-        
+
     }
     
-    
+    ///////////DEBUG
+    @objc func DEBUGCOLLECTTOPULL() {
+        
+        // Refresh at ViewController loading
+        let MemJwt2 = UserDefaults.standard.string(forKey: "jwt2")!
+        let targetURL = "http://83.217.132.102:3000/events/innerjoin"
+        
+        AlamoDebugCollect(targetURL: targetURL, jwt2: MemJwt2){validation in
+            if validation == true {
+                print("validation is true")
+                self.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+                return
+            } else {
+                print("problem on refresh")
+                self.refreshControl?.endRefreshing()
+            }
+            
+        }
+}
+        
+        func AlamoDebugCollect (targetURL: String,jwt2: String, completion: @escaping (_ done: Bool) -> Void) {
+            
+            //let targetURL = "http://83.217.132.102:3000/events/innerjoin"
+            let url = URL(string: targetURL)!
+            var request = URLRequest(url: url)
+            request.httpMethod = HTTPMethod.get.rawValue
+            request.setValue(jwt2, forHTTPHeaderField: "jwt2")
+            
+            Alamofire.request(request)
+                .validate()
+                .responseJSON { response in
+                    
+                    //print(response)
+                    
+                    switch response.result {
+                        
+                    case .success:
+                        
+                        guard response.result.isSuccess else {return completion(false)}
+                        guard let rawInventory = response.result.value as? [[String:Any]?] else {return completion(false)}
+                        
+                        let inventory = rawInventory.flatMap { EvenDict -> eventClass? in
+                            let data = EvenDict!
+                            return eventClass(data: data)
+                        }
+                        guard inventory != nil else {return}
+                        self.eventsList = inventory
+
+                        
+                        completion(true)
+                        
+                    case .failure(let error):
+                        print(error)
+                        
+                    }
+                    
+            }
+            
+        }
+
 // ============================== TABLE FUNCTIONS ============================
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eventsList.count
@@ -190,6 +258,9 @@ public class eventClass {
     }
     
 }
+
+
+
 
 
 

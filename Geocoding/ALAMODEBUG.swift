@@ -38,7 +38,7 @@ class StreetFitTokenHandler: RequestAdapter, RequestRetrier {
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         if let urlString = urlRequest.url?.absoluteString, urlString.hasPrefix(baseURLString) {
             var urlRequest = urlRequest
-            print("DEBUG ADAPTER JWT IS", jwt1!)
+            print("DEBUG ADAPTER JWT1 IS", jwt1!)
             urlRequest.setValue(jwt1, forHTTPHeaderField: "jwt1")
             urlRequest.setValue(jwt2, forHTTPHeaderField: "jwt2")
             return urlRequest
